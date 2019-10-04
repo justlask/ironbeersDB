@@ -6,7 +6,7 @@ const Beer = require('../models/Beer')
 
 
 
-router.get('/seeddatabase', async (req,res,next) => {
+router.get('/database/seed', async (req,res,next) => {
   let beers = await punkAPI.getBeers()
   Beer.create(beers).then(data => {
     res.json(data)
@@ -29,6 +29,16 @@ router.get('/random', (req,res,next) => {
   }).catch(err => next(err))
 })
 
+router.get('/search', (req,res, next) => {
+  let query = req.query.q
+  Beer.find().then(data => {
+      let newBeer = data.filter(beer => {return beer.name.toLowerCase().includes(query)})
+      res.json(newBeer)
+  }).catch(err => next(err))
+  
+})
+
+
 
 router.get('/:id', (req,res,next) => {
   Beer.find({id: req.params.id}).then(beer => {
@@ -37,12 +47,6 @@ router.get('/:id', (req,res,next) => {
 })
 
 
-router.get('/search', (req,res, next) => {
-  console.log('>>>>>>>>>>>>>>>>>>>>>' + req.query)
-  Beer.find({name: req.query.q}).then(beers => {
-    res.json(beers)
-  }).catch(err => next(err))
-})
 
 
 router.post('/new', (req,res, next) => {
@@ -57,8 +61,7 @@ router.post('/new', (req,res, next) => {
 })
 
 
-
-router.get('/dropdatabase', async (req,res,next) => {
+router.get('/database/drop', async (req,res,next) => {
   Beer.dropCollection();
 })
 
