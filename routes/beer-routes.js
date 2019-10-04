@@ -26,15 +26,15 @@ router.get('/', (req,res,next) => {
 
 
 router.get('/random', (req,res,next) => {
-  let random = Math.floor(Math.random()*25)
-  Beer.findById(random).then(beer => {
+  let random = Math.floor(Math.random()*23)
+  Beer.findOne({id: random}).then(beer => {
     res.json(beer)
   }).catch(err => next(err))
 })
 
 
 router.get('/:id', (req,res,next) => {
-  Beer.findById(req.params.id).then(beer => {
+  Beer.find({id: req.params.id}).then(beer => {
     res.json(beer)
   }).catch(err => next(err))
 })
@@ -58,7 +58,6 @@ router.post('/new', (req,res, next) => {
     contributed_by: req.params.contributed_by,
     image: 'https://bonnevillebrewery.com/wp-content/uploads/beer-default-light.png'
   }
-
   Beer.create(newBeer).then(beer => {
     res.json(beer)
   }).catch(err => next(err))
