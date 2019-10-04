@@ -38,7 +38,7 @@ router.get('/:id', (req,res,next) => {
 
 
 router.get('/search', (req,res, next) => {
-
+  console.log('>>>>>>>>>>>>>>>>>>>>>' + req.query)
   Beer.find({name: req.query.q}).then(beers => {
     res.json(beers)
   }).catch(err => next(err))
