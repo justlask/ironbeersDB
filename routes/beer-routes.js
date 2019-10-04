@@ -6,7 +6,7 @@ const Beer = require('../models/Beer')
 
 
 
-router.get('/seeditfam', async (req,res,next) => {
+router.get('/seeddatabase', async (req,res,next) => {
   let beers = await punkAPI.getBeers()
   Beer.create(beers).then(data => {
     res.json(data)
@@ -14,9 +14,6 @@ router.get('/seeditfam', async (req,res,next) => {
     next(err)
   })
 })
-
-
-
 
 router.get('/', (req,res,next) => {
   Beer.find().limit(25).then(beers => {
@@ -41,27 +38,28 @@ router.get('/:id', (req,res,next) => {
 
 
 router.get('/search', (req,res, next) => {
-  Beer.find(req.query).then(beers => {
+
+  Beer.find({name: req.query.q}).then(beers => {
     res.json(beers)
   }).catch(err => next(err))
 })
 
 
 router.post('/new', (req,res, next) => {
-  let newBeer = {
-    name: req.params.name,
-    tagline: req.params.tagline,
-    description: req.params.description,
-    first_brewed: req.params.first_brewed,
-    brewers_tips: req.params.brewers_tips,
-    attenuation_level: req.params.attenuation_level,
-    contributed_by: req.params.contributed_by,
-    image: 'https://bonnevillebrewery.com/wp-content/uploads/beer-default-light.png'
+  let newBeer = req.body
+
+  if (req.body.image === undefined) {
+    newBeer.image = 'https://bonnevillebrewery.com/wp-content/uploads/beer-default-light.png'
   }
   Beer.create(newBeer).then(beer => {
     res.json(beer)
   }).catch(err => next(err))
 })
 
+
+
+router.get('/dropdatabase', async (req,res,next) => {
+  Beer.dropCollection();
+})
 
 module.exports = router;
