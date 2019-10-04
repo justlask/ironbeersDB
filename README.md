@@ -1,0 +1,1 @@
+<h1>This is a new database for the ironhack lab, lab-react-ironbeers</h1>
